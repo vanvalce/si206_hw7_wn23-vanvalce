@@ -92,9 +92,7 @@ def make_players_table(data, cur, conn):
 def nationality_search(countries, cur, conn):
     questions = ", ".join(['?' for _ in countries])
     cur.execute(
-        f'''SELECT name, position_id, nationality
-        FROM Players
-        WHERE nationality IN ({questions})''', countries)
+        f'''SELECT name, position_id, nationality FROM Players WHERE nationality IN ({questions})''', countries)
     return cur.fetchall()
 
 ## [TASK 3]: 10 points
@@ -114,7 +112,10 @@ def nationality_search(countries, cur, conn):
 
 
 def birthyear_nationality_search(age, country, cur, conn):
-    pass
+    threshold = 2023-age
+    cur.execute(
+        '''SELECT name, nationality, birthyear FROM Players WHERE nationality = ? and birthyear < ?''', (country, threshold))
+    return cur.fetchall()
 
 ## [TASK 4]: 15 points
 # finish the function position_birth_search
